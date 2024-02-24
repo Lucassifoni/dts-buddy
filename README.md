@@ -1,5 +1,5 @@
 # dts-buddy
-Research on a device tree source buddy to help people compile &amp; load DTBOs at runtime in Elixir
+  Research on a device tree source buddy to help people compile &amp; load DTBOs at runtime in Elixir
 
   DtsBuddy is meant to provide utilities to handle runtime loading of
   device tree overlays, while reducing the ceremony required by the
@@ -38,7 +38,28 @@ Research on a device tree source buddy to help people compile &amp; load DTBOs a
   provided by Frank Hunleth.
 
       iex> import DtsBuddy.Sigil
-          #{File.read!("sample_dt.dts")}
+      iex> ~DTS"""
+        /dts-v1/;
+        /plugin/;
+
+        /* Compile:
+            dtc -@ -I dts -O dtb -o gpio_led.dtbo gpio_led.dts
+        */
+
+        &{/} {
+            gpios_leds {
+                compatible = "gpio-leds";
+                test_led@36 {
+                    label = "test-led-gpio36";
+                    gpios = <&pio 1 4 0>; /* GPIO36/PB4 */
+
+                    /* Blink LED at 1 Hz (500 ms on, off) */
+                    linux,default-trigger = "pattern";
+                    led-pattern = <1 500 1 0 0 500 0 0>;
+                };
+            };
+        };
+      """test_led
       {:ok, "/data/test_led.dtbo", "test_led"}
 
 
