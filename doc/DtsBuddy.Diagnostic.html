@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.31.1">
+    <meta name="project" content="dts_buddy v0.1.0">
+
+
+    <title>DtsBuddy.Diagnostic — dts_buddy v0.1.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-FM2CSD74.css" />
+
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-43PMFBC7.js"></script>
+    <script src="dist/sidebar_items-58B17600.js"></script>
+
+      <script src="docs_config.js"></script>
+
+    <script async src="dist/html-L4O5OK2K.js"></script>
+
+
+  </head>
+  <body data-type="modules" class="page-module">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="main">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<div class="background-layer"></div>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="api-reference.html" class="sidebar-projectName" translate="no">
+dts_buddy
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-listNav" class="sidebar-listNav" role="tablist">
+      <li>
+        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
+Pages
+        </button>
+      </li>
+
+        <li>
+          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
+            Modules
+          </button>
+        </li>
+
+
+    </ul>
+  </div>
+
+  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
+    <ul id="extras-full-list" class="full-list"></ul>
+  </div>
+
+    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
+      <ul id="modules-full-list" class="full-list"></ul>
+    </div>
+
+
+</nav>
+
+<main class="content">
+  <output role="status" id="toast"></output>
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+      <div class="top-search">
+        <div class="search-settings">
+          <form class="search-bar" action="search.html">
+            <label class="search-label">
+              <span class="sr-only">Search documentation of dts_buddy</span>
+              <input name="q" type="text" class="search-input" placeholder="Search Documentation (press /)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            </label>
+            <button type="submit" class="search-button" aria-label="Submit Search">
+              <i class="ri-search-2-line ri-lg" aria-hidden="true" title="Submit search"></i>
+            </button>
+            <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+              <i class="ri-close-line ri-lg" title="Cancel search"></i>
+            </button>
+          </form>
+          <div class="autocomplete">
+          </div>
+          <button class="icon-settings display-settings">
+            <i class="ri-settings-3-line"></i>
+            <span class="sr-only">Settings</span>
+          </button>
+        </div>
+
+      </div>
+
+<h1>
+
+  <span translate="no">DtsBuddy.Diagnostic</span> 
+  <small class="app-vsn" translate="no">(dts_buddy v0.1.0)</small>
+
+</h1>
+
+
+  <section id="moduledoc">
+<p>Runs an overlay through the compilation and loading cycle, then proceeds to check
+if there really is the expected outcome on the header.</p><p>To run a diagnostic cycle, you should call run_diagnostic/1, passing a reader function
+as an argument. This is so that we do not directly depend on Circuits.GPIO as this is
+not strictly needed to use DtsBuddy.</p><p>Example use, succeeding :</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="6253903555-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">gpio</span><span class="p" data-group-id="6253903555-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Circuits.GPIO</span><span class="o">.</span><span class="n">open</span><span class="p" data-group-id="6253903555-2">(</span><span class="s">&quot;GPIO12&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:input</span><span class="p" data-group-id="6253903555-2">)</span><span class="w">
+</span><span class="p" data-group-id="6253903555-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6253903555-4">%</span><span class="nc" data-group-id="6253903555-4">Circuits.GPIO.CDev</span><span class="p" data-group-id="6253903555-4">{</span><span class="p" data-group-id="6253903555-4">}</span><span class="p" data-group-id="6253903555-3">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k" data-group-id="6253903555-5">fn</span><span class="w"> </span><span class="p" data-group-id="6253903555-6">(</span><span class="p" data-group-id="6253903555-6">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Circuits.GPIO</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="6253903555-7">(</span><span class="n">gpio</span><span class="p" data-group-id="6253903555-7">)</span><span class="w">
+</span><span class="p" data-group-id="6253903555-8">#</span><span class="nc" data-group-id="6253903555-8">Function</span><span class="p" data-group-id="6253903555-8">&lt;</span><span class="p" data-group-id="6253903555-8">&gt;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">DtsBuddy.Diagnostic</span><span class="o">.</span><span class="n">run_diagnostic</span><span class="p" data-group-id="6253903555-9">(</span><span class="n">reader</span><span class="p" data-group-id="6253903555-9">)</span><span class="w">
+</span><span class="p" data-group-id="6253903555-10">[</span><span class="nc">DtsBuddy.Diagnostic</span><span class="p" data-group-id="6253903555-10">]</span><span class="w"> </span><span class="nc">Running</span><span class="w"> </span><span class="n">system</span><span class="w"> </span><span class="n">checks</span><span class="w">
+</span><span class="p" data-group-id="6253903555-11">[</span><span class="nc">DtsBuddy.Diagnostic</span><span class="p" data-group-id="6253903555-11">]</span><span class="w"> </span><span class="nc">All</span><span class="w"> </span><span class="n">system</span><span class="w"> </span><span class="n">checks</span><span class="w"> </span><span class="n">passed</span><span class="w">
+</span><span class="p" data-group-id="6253903555-12">[</span><span class="nc">DtsBuddy.Diagnostic</span><span class="p" data-group-id="6253903555-12">]</span><span class="w"> </span><span class="nc">Loading</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">sample</span><span class="w"> </span><span class="n">overlay</span><span class="w">
+</span><span class="p" data-group-id="6253903555-13">[</span><span class="nc">DtsBuddy.Diagnostic</span><span class="p" data-group-id="6253903555-13">]</span><span class="w"> </span><span class="nc">Sampling</span><span class="w"> </span><span class="nc">GPIO</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">user</span><span class="o">-</span><span class="n">supplied</span><span class="w"> </span><span class="n">reader</span><span class="w"> </span><span class="n">function</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="err">~</span><span class="mi">5</span><span class="w"> </span><span class="n">seconds</span><span class="w">
+</span><span class="p" data-group-id="6253903555-14">[</span><span class="nc">DtsBuddy.Diagnostic</span><span class="p" data-group-id="6253903555-14">]</span><span class="w"> </span><span class="nc">Behavior</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">activated</span><span class="w"> </span><span class="nc">GPIO</span><span class="w"> </span><span class="n">looks</span><span class="w"> </span><span class="n">correct</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="nc">LOW</span><span class="w"> </span><span class="n">samples</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="nc">HIGH</span><span class="w"> </span><span class="n">samples</span><span class="w">
+</span><span class="p" data-group-id="6253903555-15">[</span><span class="nc">DtsBuddy.Diagnostic</span><span class="p" data-group-id="6253903555-15">]</span><span class="w"> </span><span class="nc">Unloading</span><span class="w"> </span><span class="n">overlay</span><span class="w"> </span><span class="n">testled</span><span class="w">
+</span><span class="p" data-group-id="6253903555-16">[</span><span class="nc">DtsBuddy.Diagnostic</span><span class="p" data-group-id="6253903555-16">]</span><span class="w"> </span><span class="nc">Everything</span><span class="w"> </span><span class="n">looks</span><span class="w"> </span><span class="nc">OK</span><span class="w">
+</span><span class="ss">:ok</span></code></pre><p>Example use, failing :</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="6855992729-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">gpio</span><span class="p" data-group-id="6855992729-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Circuits.GPIO</span><span class="o">.</span><span class="n">open</span><span class="p" data-group-id="6855992729-2">(</span><span class="s">&quot;GPIO12&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:input</span><span class="p" data-group-id="6855992729-2">)</span><span class="w">
+</span><span class="p" data-group-id="6855992729-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6855992729-4">%</span><span class="nc" data-group-id="6855992729-4">Circuits.GPIO.CDev</span><span class="p" data-group-id="6855992729-4">{</span><span class="p" data-group-id="6855992729-4">}</span><span class="p" data-group-id="6855992729-3">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k" data-group-id="6855992729-5">fn</span><span class="w"> </span><span class="p" data-group-id="6855992729-6">(</span><span class="p" data-group-id="6855992729-6">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Circuits.GPIO</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="6855992729-7">(</span><span class="n">gpio</span><span class="p" data-group-id="6855992729-7">)</span><span class="w">
+</span><span class="p" data-group-id="6855992729-8">#</span><span class="nc" data-group-id="6855992729-8">Function</span><span class="p" data-group-id="6855992729-8">&lt;</span><span class="p" data-group-id="6855992729-8">&gt;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">DtsBuddy.Diagnostic</span><span class="o">.</span><span class="n">run_diagnostic</span><span class="p" data-group-id="6855992729-9">(</span><span class="n">reader</span><span class="p" data-group-id="6855992729-9">)</span><span class="w">
+</span><span class="p" data-group-id="6855992729-10">[</span><span class="nc">DtsBuddy.Diagnostic</span><span class="p" data-group-id="6855992729-10">]</span><span class="w"> </span><span class="nc">Running</span><span class="w"> </span><span class="n">system</span><span class="w"> </span><span class="n">checks</span><span class="w">
+</span><span class="p" data-group-id="6855992729-11">[</span><span class="nc">DtsBuddy.Diagnostic</span><span class="p" data-group-id="6855992729-11">]</span><span class="w"> </span><span class="nc">Device</span><span class="w"> </span><span class="n">tree</span><span class="w"> </span><span class="n">compiler</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">missing</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">system</span><span class="o">.</span><span class="w">
+</span><span class="p" data-group-id="6855992729-12">[</span><span class="nc">DtsBuddy.Diagnostic</span><span class="p" data-group-id="6855992729-12">]</span><span class="w"> </span><span class="nc">All</span><span class="w"> </span><span class="n">tests</span><span class="w"> </span><span class="n">did</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">pass</span><span class="o">.</span><span class="w"> </span><span class="nc">Please</span><span class="w"> </span><span class="n">refer</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">above</span><span class="w"> </span><span class="n">logs</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">further</span><span class="w"> </span><span class="n">details</span><span class="o">.</span><span class="w">
+</span><span class="ss">:error</span></code></pre>
+  </section>
+
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#gather_samples/1" translate="no">gather_samples(reader_fn)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gathers samples to check the actual behavior of the LED overlay by sampling GPIO roughly every 100ms.
+Output should be a list of 1 and 0s.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#valid_samples/1" translate="no">valid_samples(samples)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Checks if the samples collected by the reader function look correct, in the sense that there was enough variation
+of output in the given time. An erratic GPIO would currently look correct if it was checked by this function though.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="gather_samples/1">
+
+  <div class="detail-header">
+    <a href="#gather_samples/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">gather_samples(reader_fn)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> gather_samples((... -&gt; <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>())) :: [<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>()]</pre>
+
+      </div>
+
+<p>Gathers samples to check the actual behavior of the LED overlay by sampling GPIO roughly every 100ms.
+Output should be a list of 1 and 0s.</p>
+  </section>
+</section>
+<section class="detail" id="valid_samples/1">
+
+  <div class="detail-header">
+    <a href="#valid_samples/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">valid_samples(samples)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> valid_samples(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()) :: :error | :ok</pre>
+
+      </div>
+
+<p>Checks if the samples collected by the reader function look correct, in the sense that there was enough variation
+of output in the given time. An erratic GPIO would currently look correct if it was checked by this function though.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+      <footer class="footer">
+        <p>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+              Search HexDocs
+            </button>
+
+              <a href="dts_buddy.epub" title="ePub version">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.31.1) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+      </footer>
+    </div>
+  </div>
+</main>
+</div>
+
+
+  </body>
+</html>

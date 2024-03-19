@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.31.1">
+    <meta name="project" content="dts_buddy v0.1.0">
+
+
+    <title>DtsBuddy — dts_buddy v0.1.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-FM2CSD74.css" />
+
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-43PMFBC7.js"></script>
+    <script src="dist/sidebar_items-58B17600.js"></script>
+
+      <script src="docs_config.js"></script>
+
+    <script async src="dist/html-L4O5OK2K.js"></script>
+
+
+  </head>
+  <body data-type="modules" class="page-module">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="main">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<div class="background-layer"></div>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="api-reference.html" class="sidebar-projectName" translate="no">
+dts_buddy
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-listNav" class="sidebar-listNav" role="tablist">
+      <li>
+        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
+Pages
+        </button>
+      </li>
+
+        <li>
+          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
+            Modules
+          </button>
+        </li>
+
+
+    </ul>
+  </div>
+
+  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
+    <ul id="extras-full-list" class="full-list"></ul>
+  </div>
+
+    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
+      <ul id="modules-full-list" class="full-list"></ul>
+    </div>
+
+
+</nav>
+
+<main class="content">
+  <output role="status" id="toast"></output>
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+      <div class="top-search">
+        <div class="search-settings">
+          <form class="search-bar" action="search.html">
+            <label class="search-label">
+              <span class="sr-only">Search documentation of dts_buddy</span>
+              <input name="q" type="text" class="search-input" placeholder="Search Documentation (press /)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            </label>
+            <button type="submit" class="search-button" aria-label="Submit Search">
+              <i class="ri-search-2-line ri-lg" aria-hidden="true" title="Submit search"></i>
+            </button>
+            <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+              <i class="ri-close-line ri-lg" title="Cancel search"></i>
+            </button>
+          </form>
+          <div class="autocomplete">
+          </div>
+          <button class="icon-settings display-settings">
+            <i class="ri-settings-3-line"></i>
+            <span class="sr-only">Settings</span>
+          </button>
+        </div>
+
+      </div>
+
+<h1>
+
+  <span translate="no">DtsBuddy</span> 
+  <small class="app-vsn" translate="no">(dts_buddy v0.1.0)</small>
+
+</h1>
+
+
+  <section id="moduledoc">
+<p>DtsBuddy is meant to provide utilities to handle runtime loading of
+device tree overlays, while reducing the ceremony required by the
+configfs interface.</p><h2 id="module-requirements" class="section-heading">
+  <a href="#module-requirements" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Requirements</span>
+</h2>
+<p>Nerves systems must be compiled with those options for this to work :</p><pre><code class="makeup elixir" translate="no"><span class="nc">BR2_PACKAGE_DTC</span><span class="o">=</span><span class="n">y</span><span class="w">
+</span><span class="nc">BR2_PACKAGE_DTC_PROGRAMS</span><span class="o">=</span><span class="n">y</span><span class="w">
+</span><span class="nc">CONFIG_OF_CONFIGFS</span><span class="o">=</span><span class="n">y</span></code></pre><h2 id="module-usage" class="section-heading">
+  <a href="#module-usage" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Usage</span>
+</h2>
+<h3 id="module-enabling-overlays-configfs" class="section-heading">
+  <a href="#module-enabling-overlays-configfs" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Enabling overlays configfs</span>
+</h3>
+<p>The overlays configfs must first be enabled :</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">DtsBuddy</span><span class="o">.</span><span class="n">enable_overlays</span><span class="p" data-group-id="1104111107-1">(</span><span class="p" data-group-id="1104111107-1">)</span><span class="w">
+</span><span class="ss">:ok</span></code></pre><p>This has the same effect as running this command (and does behind the scenes) :</p><pre><code class="makeup elixir" translate="no"><span class="nc">System</span><span class="o">.</span><span class="n">cmd</span><span class="p" data-group-id="4457279942-1">(</span><span class="s">&quot;mount&quot;</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4457279942-2">[</span><span class="s">&quot;-t&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;configfs&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;none&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/sys/kernel/config&quot;</span><span class="p" data-group-id="4457279942-2">]</span><span class="p" data-group-id="4457279942-1">)</span></code></pre><h3 id="module-checking-if-overlays-are-enabled" class="section-heading">
+  <a href="#module-checking-if-overlays-are-enabled" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Checking if overlays are enabled</span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">DtsBuddy</span><span class="o">.</span><span class="n">overlays_enabled?</span><span class="p" data-group-id="0583244931-1">(</span><span class="p" data-group-id="0583244931-1">)</span><span class="w">
+</span><span class="no">true</span></code></pre><h3 id="module-compiling-a-dts-source" class="section-heading">
+  <a href="#module-compiling-a-dts-source" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Compiling a DTS source</span>
+</h3>
+<p>If your source is fully static, you can either call <a href="#compile/2"><code class="inline">DtsBuddy.compile/2</code></a> or use
+the sigil provided by <a href="DtsBuddy.Sigil.html"><code class="inline">DtsBuddy.Sigil</code></a>. The source of the following examples was
+provided by Frank Hunleth.</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nc">DtsBuddy.Sigil</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="err">~</span><span class="nc">DTS</span><span class="s">&quot;&quot;&quot;
+/dts-v1/;
+/plugin/;
+
+/* Compile:
+    dtc -@ -I dts -O dtb -o gpio_led.dtbo gpio_led.dts
+*/
+
+&amp;{/} {
+    gpios_leds {
+        compatible = &quot;gpio-leds&quot;;
+        test_led@36 {
+            label = &quot;test-led-gpio36&quot;;
+            gpios = &lt;&amp;pio 1 4 0&gt;; /* GPIO36/PB4 */
+
+            /* Blink LED at 1 Hz (500 ms on, off) */
+            linux,default-trigger = &quot;pattern&quot;;
+            led-pattern = &lt;1 500 1 0 0 500 0 0&gt;;
+        };
+    };
+};
+&quot;&quot;&quot;</span><span class="n">test_led</span><span class="w">  
+
+</span><span class="p" data-group-id="2120699230-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/data/test_led.dtbo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;test_led&quot;</span><span class="p" data-group-id="2120699230-1">}</span></code></pre><p>You should provide both the heredoc contents (inside triple quotes) and modifiers
+(after the heredoc closes, here &quot;test_led&quot;). We use the modifiers as the overlay
+name later.</p><p>Using the sigil is strictly equivalent to calling <a href="#compile/2"><code class="inline">DtsBuddy.compile/2</code></a>.
+<a href="DtsBuddy.html#content"><code class="inline">DtsBuddy</code></a> does not immediately load this overlay.</p><p>If your source is not static, you can either manually build it to call <a href="#compile/2"><code class="inline">DtsBuddy.compile/2</code></a>,
+or use <a href="#compile_eex/3"><code class="inline">DtsBuddy.compile_eex/3</code></a> to use an EEX template string.</p><h3 id="module-loading-an-overlay" class="section-heading">
+  <a href="#module-loading-an-overlay" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Loading an overlay</span>
+</h3>
+<p>The DtsBuddy.load function is thought to use the compilation result coming from either
+<a href="#compile/2"><code class="inline">DtsBuddy.compile/2</code></a> or <a href="#compile_eex/3"><code class="inline">DtsBuddy.compile_eex/3</code></a> directly, that is, a tuple having
+the form <code class="inline">{:ok, dtbo_file, name}</code>.</p><p>Loading the overlay with the name &lt;name&gt; will create the directory <code class="inline">/sys/kernel/config/device-tree/overlays/&lt;name&gt;</code>,
+and write the contents of the compiled dtbo file to <code class="inline">/sys/kernel/config/device-tree/overlays/&lt;name&gt;/dtbo</code>.</p><p>After loading an overlay, calling <a href="#status/1"><code class="inline">DtsBuddy.status/1</code></a> with the overlay name should return <code class="inline">:applied</code>.</p>
+  </section>
+
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#compile/2" translate="no">compile(dts_string, name)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>See <a href="DtsBuddy.Backend.html#compile/2"><code class="inline">DtsBuddy.Backend.compile/2</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#compile_eex/3" translate="no">compile_eex(str, bindings, name)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>See <a href="DtsBuddy.Backend.html#compile_eex/3"><code class="inline">DtsBuddy.Backend.compile_eex/3</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#enable_overlays/0" translate="no">enable_overlays()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>See <a href="DtsBuddy.Backend.html#enable_overlays/0"><code class="inline">DtsBuddy.Backend.enable_overlays/0</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#load/1" translate="no">load(compilation_result)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>See <a href="DtsBuddy.Backend.html#load/1"><code class="inline">DtsBuddy.Backend.load/1</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#overlays_enabled?/0" translate="no">overlays_enabled?()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>See <a href="DtsBuddy.Backend.html#overlays_enabled?/0"><code class="inline">DtsBuddy.Backend.overlays_enabled?/0</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#status/1" translate="no">status(overlay_name)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>See <a href="DtsBuddy.Backend.html#status/1"><code class="inline">DtsBuddy.Backend.status/1</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#unload/1" translate="no">unload(name)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>See <a href="DtsBuddy.Backend.html#unload/1"><code class="inline">DtsBuddy.Backend.unload/1</code></a>.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="compile/2">
+
+  <div class="detail-header">
+    <a href="#compile/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">compile(dts_string, name)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>See <a href="DtsBuddy.Backend.html#compile/2"><code class="inline">DtsBuddy.Backend.compile/2</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="compile_eex/3">
+
+  <div class="detail-header">
+    <a href="#compile_eex/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">compile_eex(str, bindings, name)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>See <a href="DtsBuddy.Backend.html#compile_eex/3"><code class="inline">DtsBuddy.Backend.compile_eex/3</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="enable_overlays/0">
+
+  <div class="detail-header">
+    <a href="#enable_overlays/0" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">enable_overlays()</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>See <a href="DtsBuddy.Backend.html#enable_overlays/0"><code class="inline">DtsBuddy.Backend.enable_overlays/0</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="load/1">
+
+  <div class="detail-header">
+    <a href="#load/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">load(compilation_result)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>See <a href="DtsBuddy.Backend.html#load/1"><code class="inline">DtsBuddy.Backend.load/1</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="overlays_enabled?/0">
+
+  <div class="detail-header">
+    <a href="#overlays_enabled?/0" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">overlays_enabled?()</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>See <a href="DtsBuddy.Backend.html#overlays_enabled?/0"><code class="inline">DtsBuddy.Backend.overlays_enabled?/0</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="status/1">
+
+  <div class="detail-header">
+    <a href="#status/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">status(overlay_name)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>See <a href="DtsBuddy.Backend.html#status/1"><code class="inline">DtsBuddy.Backend.status/1</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="unload/1">
+
+  <div class="detail-header">
+    <a href="#unload/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">unload(name)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>See <a href="DtsBuddy.Backend.html#unload/1"><code class="inline">DtsBuddy.Backend.unload/1</code></a>.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+      <footer class="footer">
+        <p>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+              Search HexDocs
+            </button>
+
+              <a href="dts_buddy.epub" title="ePub version">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.31.1) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+      </footer>
+    </div>
+  </div>
+</main>
+</div>
+
+
+  </body>
+</html>

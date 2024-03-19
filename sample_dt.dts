@@ -1,6 +1,6 @@
 
     iex> ~DTS"""
-     /dts-v1/;
+    /dts-v1/;
     /plugin/;
 
     /* Compile:

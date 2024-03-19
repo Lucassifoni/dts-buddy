@@ -51,6 +51,19 @@ defmodule DtsBuddy.Backend do
   def load({:ok, path, name}), do: do_load(path, name)
   def load({:error, e}), do: {:error, e}
 
+  @doc """
+  Unloads an overlay. This should be used in a managed way as overlays must be
+  unloaded in-order in a LIFO way. That is, the last applied overlay must be the
+  first to be un-applied.
+  If you wish to unload the third-topmost loaded overlay, while keeping the two
+  that follow, you should unapply three overlays, then re-apply the last two.
+  DtsBuddy.OverlayManager will help with that.
+  """
+  @spec unload(binary()) :: :ok | {:error, any()}
+  def unload(name) do
+    File.rm(Paths.overlay_dir(name))
+  end
+
   @spec do_load(binary(), binary()) :: :ok | {:error, any()}
   defp do_load(path, name) do
     dir = Paths.overlay_dir(name)
@@ -82,6 +95,23 @@ defmodule DtsBuddy.Backend do
     compile(dts_string, "#{name}")
   end
 
+  @spec do_compile(binary(), binary()) :: :ok | {:error, any()}
+  defp do_compile(dts, dtbo) do
+    case System.cmd("dtc", [
+           "-@",
+           "-I",
+           "dts",
+           "-O",
+           "dtb",
+           "-o",
+           dtbo,
+           dts
+         ]) do
+      {_, 0} -> :ok
+      e -> {:error, e}
+    end
+  end
+
   @doc """
   Compiles a static DTS string to the given name.
   Files written are /data/<name>.dts and /data/<name>.dtbo.
@@ -91,25 +121,18 @@ defmodule DtsBuddy.Backend do
   If invalid, provide an helpful error to the user.
   """
   @spec compile(binary(), binary()) ::
-          {:error, {any(), pos_integer()}}
+          {:error, any()}
           | {:ok, binary(), binary()}
   def compile(dts_string, name) do
     dts_file = Paths.dts_file_path(name)
     dtbo_file = Paths.dtbo_file_path(name)
-    File.write(dts_file, dts_string)
 
-    case System.cmd("dtc", [
-           "-@",
-           "-I",
-           "dts",
-           "-O",
-           "dtb",
-           "-o",
-           dtbo_file,
-           dts_file
-         ]) do
-      {_, 0} -> {:ok, dtbo_file, name}
-      e -> {:error, e}
+    with {_, :ok} <- {:write, File.write(dts_file, dts_string)},
+         {_, :ok} <- {:compile, do_compile(dts_file, dtbo_file)} do
+      {:ok, dtbo_file, name}
+    else
+      {:write, _} -> {:error, "Writing the DTS file failed. Please verify the name provided."}
+      {:compile, e} -> {:error, {"Compiling the DTS file failed. Here is output from DTC :", e}}
     end
   end
 end
