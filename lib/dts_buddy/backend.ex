@@ -51,19 +51,6 @@ defmodule DtsBuddy.Backend do
   def load({:ok, path, name}), do: do_load(path, name)
   def load({:error, e}), do: {:error, e}
 
-  @doc """
-  Unloads an overlay. This should be used in a managed way as overlays must be
-  unloaded in-order in a LIFO way. That is, the last applied overlay must be the
-  first to be un-applied.
-  If you wish to unload the third-topmost loaded overlay, while keeping the two
-  that follow, you should unapply three overlays, then re-apply the last two.
-  DtsBuddy.OverlayManager will help with that.
-  """
-  @spec unload(binary()) :: :ok | {:error, any()}
-  def unload(name) do
-    File.rm(Paths.overlay_dir(name))
-  end
-
   @spec do_load(binary(), binary()) :: :ok | {:error, any()}
   defp do_load(path, name) do
     dir = Paths.overlay_dir(name)

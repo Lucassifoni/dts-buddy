@@ -70,6 +70,6 @@ defmodule DtsBuddy do
   defdelegate compile_eex(str, bindings, name), to: Backend
   defdelegate compile(dts_string, name), to: Backend
   defdelegate load(compilation_result), to: Backend
-  defdelegate unload(name), to: Backend
   defdelegate status(overlay_name), to: Backend
+  defdelegate checks(), to: Backend
 end

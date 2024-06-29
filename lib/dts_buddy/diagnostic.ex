@@ -64,30 +64,13 @@ defmodule DtsBuddy.Diagnostic do
          {:ok, _, name} = compilation_result <- compile_sample(),
          :ok <- DtsBuddy.load(compilation_result),
          samples <- gather_samples(reader_fn),
-         :ok <- valid_samples(samples),
-         :ok <- unload(name) do
+         :ok <- valid_samples(samples) do
       log("Everything looks OK.")
       :ok
     else
       _ ->
         log("All tests did not pass. Please refer to the above logs for further details.")
         :error
-    end
-  end
-
-  @doc false
-  @spec unload(binary()) :: :error | :ok
-  def unload(name) do
-    log("Unloading overlay #{name}")
-    DtsBuddy.unload(name)
-
-    case DtsBuddy.status(name) do
-      :applied ->
-        log("Unloading overlay #{name} failed")
-        :error
-
-      _ ->
-        :ok
     end
   end
 
@@ -123,7 +106,7 @@ defmodule DtsBuddy.Diagnostic do
 
     Task.await_many(
       Enum.map(0..50, fn i ->
-        Task.async(fn () ->
+        Task.async(fn ->
           Process.sleep(i * 100)
           reader_fn.()
         end)
