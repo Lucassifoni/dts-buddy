@@ -123,8 +123,10 @@ defmodule DtsBuddy.Diagnostic do
 
     Task.await_many(
       Enum.map(0..50, fn i ->
-        Process.sleep(i * 100)
-        reader_fn.()
+        Task.async(fn () ->
+          Process.sleep(i * 100)
+          reader_fn.()
+        end)
       end),
       10_000
     )
