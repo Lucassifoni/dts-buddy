@@ -1,6 +1,8 @@
 defmodule DtsBuddy.MixProject do
   use Mix.Project
 
+  @source_url "https://github.com/lucassifoni/dts-buddy"
+
   def project do
     [
       app: :dts_buddy,
@@ -22,7 +24,7 @@ defmodule DtsBuddy.MixProject do
   defp package do
     [
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/lucassifoni/dts-buddy"},
+      links: %{"GitHub" => @source_url},
       files: ~w(lib sample_dt.dts mix.exs README.md LICENSE .formatter.exs)
     ]
   end
