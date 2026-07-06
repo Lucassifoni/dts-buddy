@@ -61,7 +61,7 @@ defmodule DtsBuddy.Diagnostic do
   @spec run_diagnostic(fun()) :: :error | :ok
   def run_diagnostic(reader_fn) do
     with :ok <- run_system_checks(),
-         {:ok, _, name} = compilation_result <- compile_sample(),
+         {:ok, _, _name} = compilation_result <- compile_sample(),
          :ok <- DtsBuddy.load(compilation_result),
          samples <- gather_samples(reader_fn),
          :ok <- valid_samples(samples) do
