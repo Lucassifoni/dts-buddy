@@ -53,10 +53,19 @@ defmodule DtsBuddy.Backend do
 
   @spec do_load(binary(), binary()) :: :ok | {:error, any()}
   defp do_load(path, name) do
-    dir = Paths.overlay_dir(name)
-    :ok = File.mkdir(dir)
-    dtbo_path = Paths.dtbo_dir(name)
-    File.write(dtbo_path, File.read!(path))
+    with :ok <- validate_name(name),
+         :ok <- File.mkdir_p(Paths.overlay_dir(name)),
+         {:ok, contents} <- File.read(path) do
+      File.write(Paths.dtbo_dir(name), contents)
+    end
+  end
+
+  @spec validate_name(binary()) :: :ok | {:error, {:invalid_name, any()}}
+  defp validate_name(name) do
+    case Paths.valid_name?(name) do
+      true -> :ok
+      false -> {:error, {:invalid_name, name}}
+    end
   end
 
   @doc """
@@ -102,22 +111,23 @@ defmodule DtsBuddy.Backend do
   @doc """
   Compiles a static DTS string to the given name.
   Files written are /data/<name>.dts and /data/<name>.dtbo.
-  """
-  @_todo """
-  Validate the overlay name since it will be used in directory paths.
-  If invalid, provide an helpful error to the user.
+
+  The name is used verbatim to build filesystem paths and is validated with
+  `DtsBuddy.Paths.valid_name?/1`; an invalid name returns
+  `{:error, {:invalid_name, name}}` without touching the filesystem.
   """
   @spec compile(binary(), binary()) ::
           {:error, any()}
           | {:ok, binary(), binary()}
   def compile(dts_string, name) do
-    dts_file = Paths.dts_file_path(name)
-    dtbo_file = Paths.dtbo_file_path(name)
-
-    with {_, :ok} <- {:write, File.write(dts_file, dts_string)},
+    with :ok <- validate_name(name),
+         dts_file = Paths.dts_file_path(name),
+         dtbo_file = Paths.dtbo_file_path(name),
+         {_, :ok} <- {:write, File.write(dts_file, dts_string)},
          {_, :ok} <- {:compile, do_compile(dts_file, dtbo_file)} do
       {:ok, dtbo_file, name}
     else
+      {:error, {:invalid_name, _}} = e -> e
       {:write, _} -> {:error, "Writing the DTS file failed. Please verify the name provided."}
       {:compile, e} -> {:error, {"Compiling the DTS file failed. Here is output from DTC :", e}}
     end

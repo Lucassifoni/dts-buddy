@@ -3,6 +3,20 @@ defmodule DtsBuddy.Paths do
   Helper module to remove paths juggling out of DtsBuddy.Backend
   """
 
+  @valid_name_regex ~r/\A[A-Za-z0-9_-]+\z/
+
+  @doc """
+  Checks that an overlay name is safe to splice into filesystem paths.
+
+  Names are used verbatim to build both writable file paths (under /data) and
+  configfs directories (under /sys/kernel/config/device-tree/overlays). Allowing
+  path separators or `..` would let a caller escape those trees, so we restrict
+  names to a conservative alphabet of letters, digits, `_` and `-`.
+  """
+  @spec valid_name?(any()) :: boolean()
+  def valid_name?(name) when is_binary(name), do: Regex.match?(@valid_name_regex, name)
+  def valid_name?(_), do: false
+
   @doc """
   Overlays directory.
   """
