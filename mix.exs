@@ -18,7 +18,7 @@ defmodule DtsBuddy.MixProject do
   end
 
   defp description do
-    "An helper library to compile and load device tree overlays (DTBOs) at runtime on Nerves/Linux."
+    "Compile and load device tree overlays (DTBOs) at runtime on Nerves/Linux."
   end
 
   defp package do

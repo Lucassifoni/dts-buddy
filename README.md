@@ -1,9 +1,41 @@
 # dts-buddy
-  Research on a device tree source buddy to help people compile &amp; load DTBOs at runtime in Elixir
+  Device tree source buddy to help people compile &amp; load DTBOs at runtime in Elixir
 
   DtsBuddy is meant to provide utilities to handle runtime loading of
   device tree overlays, while reducing the ceremony required by the
   configfs interface.
+
+  ## Sample usage
+
+  ```elixir
+  # import the sigil
+  import DtsBuddy.Sigil
+  # enable runtime overlays
+  DtsBuddy.enable_overlays()
+  # should return true
+  DtsBuddy.overlays_enabled?()
+
+  # call the sigil, which compiles the overlay through dtc
+  compiled =
+      ~DTS"""
+      /dts-v1/;
+      /plugin/;
+      &{/soc/pinctrl@2000000} {
+        pwm7_pb10: pwm7-pb10 { pins = "PB10"; function = "pwm7"; };
+      };
+      &{/soc/pwm@2000c00} {
+        pinctrl-names = "default";
+        pinctrl-0 = <&pwm7_pb10>;
+        status = "okay";
+      };
+      """pwm7ch
+
+  # load it 
+  DtsBuddy.load(compiled)
+
+  # on a properly configured system, it will return :applied
+  DtsBuddy.status("pwm7ch")
+  ```
 
   ## Requirements
 
